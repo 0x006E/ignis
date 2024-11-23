@@ -26,6 +26,7 @@ pkgs.stdenv.mkDerivation {
     pkgs.python312Packages.pycairo
     pkgs.python312Packages.click
     pkgs.python312Packages.charset-normalizer
+    pkgs.python312Packages.gst-python
   ];
 
   runtimeInputs = [
