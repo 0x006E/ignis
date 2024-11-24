@@ -1,6 +1,14 @@
-{ pkgs, version ? "git", ... }:
+{ fetchFromGitLab, pkgs, version ? "git", ... }:
 let
   inherit (pkgs.lib) concatStringsSep;
+
+  gvc = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "libgnome-volume-control";
+    rev = "5f9768a2eac29c1ed56f1fbb449a77a3523683b6";
+    hash = "sha256-gdgTnxzH8BeYQAsvv++Yq/8wHi7ISk2LTBfU8hk12NM=";
+  };
 in
 pkgs.stdenv.mkDerivation {
   inherit version;
@@ -33,6 +41,12 @@ pkgs.stdenv.mkDerivation {
     pkgs.gst_all_1.gst-plugins-base
     pkgs.dart-sass
   ];
+
+  postUnpack = ''
+    pushd "$sourceRoot"
+    cp -rf --no-preserve=mode "${gvc}/." ./subprojects/gvc
+    popd
+  '';
 
   patchPhase = ''
     substituteInPlace ignis/utils/sass.py \
